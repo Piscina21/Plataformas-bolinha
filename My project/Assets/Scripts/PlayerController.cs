@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private Transform cameraTransform;
 
+    // ---- ADIÇÃO: controle de moedas ----
+    private int totalCoins = 0;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -22,7 +25,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-       
         rb.freezeRotation = true;
 
         if (Camera.main != null)
@@ -40,12 +42,10 @@ public class PlayerController : MonoBehaviour
     {
         if (rb == null) return;
 
-       
         Vector3 moveDirection = Vector3.zero;
 
         if (cameraTransform != null)
         {
-            
             Vector3 forward = cameraTransform.forward;
             Vector3 right = cameraTransform.right;
             forward.y = 0f;
@@ -57,17 +57,14 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-           
             moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
         }
 
-        
         if (moveDirection.sqrMagnitude > 0.01f)
         {
             Vector3 force = moveDirection * moveSpeed;
             rb.AddForce(force, forceMode);
 
-           
             if (rb.linearVelocity.magnitude > maxVelocity)
             {
                 rb.linearVelocity = rb.linearVelocity.normalized * maxVelocity;
@@ -75,6 +72,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // ---- ADIÇÃO: método chamado pela moeda ----
+    public void AddCoins(int amount)
+    {
+        totalCoins += amount;
+        PlayerObserverManager.CoinCollected(totalCoins);
+        Debug.Log($"Moedas coletadas: {totalCoins}");
+    }
 
     private void OnDrawGizmosSelected()
     {

@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
-        
+{
+        SceneManager.LoadScene("GUI", LoadSceneMode.Additive);
         ChangeState(GameState.Iniciando);
     }
 
